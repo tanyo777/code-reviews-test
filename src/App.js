@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import User from "./User";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+  const [value, setValue] = useState("");
+  const [users, setUsers] = useState([
+    { name: "Tanyo Nikolov", age: 22},
+    { name: "Nikolay Georgiev", age: 21},
+    { name: "Martin Chuchulski", age: 21}
+  ]);
+
+
+  const changeInputValue = (event) => {
+    event.preventDefault();
+    const newValue = event.target.value;
+    setValue(newValue);
+  }
+
+  const addUser = (event) => {
+    event.preventDefault();
+    setUsers(prevState => ([
+      ...prevState,
+      { name: value, age: 23}
+    ]));
+    setValue("");
+  }
+
+  const deleteUser = (userIndex) => {
+    setUsers((prevState) => {
+      return prevState.filter((user, index) => index !== userIndex);
+    })
+  }
+
+  return(
+    <div>
+      <h1>Test</h1>
+      {/* Two way data binding */}
+      {/* value={}, onChange={} */}
+      <input value={value} onChange={changeInputValue}/>
+      <button onClick={addUser}>add user</button>
+      {users.map((user, index) => {
+        return <User name={user.name} age={user.age} index={index} key={index} deleteSelectedUser={deleteUser}/>
+      })}
     </div>
   );
 }
-
 export default App;
